@@ -6,22 +6,21 @@ library(ggplot2)
 
 difmin <- function(start,end) { as.numeric(seconds(end-start))/60 }
 
-readtimes <-function(f) {
+readtimes <-function(f,studyname) {
  read.table(f) %>% 
  `colnames<-`(c('date','age','sex','calstart','mrstart','mrend')) %>%
  mutate_each(funs(hms),calstart,mrstart,mrend) %>%
  mutate( totaltime=difmin(calstart,mrend),
          scantime=difmin(mrstart,mrend),
-         tilscan=difmin(calstart,mrstart))
+         tilscan=difmin(calstart,mrstart),
+         study=studyname)
 }
 
-dr<-readtimes('txt/rescan/times.txt')
-dr$study <- 'rescan'
+d<- rbind(
+ readtimes('txt/rescan/times.txt','rescan') ,
+ readtimes('txt/p5/times.txt','p5')
+)
 
-dp<-readtimes('txt/p5/times.txt')
-dp$study <- 'p5'
-
-d<-rbind(dr,dp)
 
 ## view summary
 d.smry <- 

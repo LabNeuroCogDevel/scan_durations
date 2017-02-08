@@ -8,7 +8,7 @@ difmin <- function(start,end) { as.numeric(seconds(end-start))/60 }
 
 readtimes <-function(f,studyname) {
  read.table(f) %>% 
- `colnames<-`(c('date','age','sex','calstart','mrstart','mrend')) %>%
+ `colnames<-`(c('date','age','sex','calstart','mrstart','mrend','id')) %>%
  mutate_each(funs(hms),calstart,mrstart,mrend) %>%
  mutate( totaltime=difmin(calstart,mrend),
          scantime=difmin(mrstart,mrend),
